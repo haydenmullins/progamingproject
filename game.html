@@ -1,4 +1,9 @@
 <!doctype html>
+<html>
+<head>
+    <title>Game</title>
+</head>
+<body>
 	<canvas id="gameCanvas" width="400" height="400"></canvas>
 	<script>
 		var canvas, canvasContext;
@@ -6,4 +11,44 @@
 		window.onload = function() {
 			canvas = document.getElementById('gameCanvas');
 			canvasContext = canvas.getContext('2d');
-</script>
+            
+            setInterval(mainLoop, 1000/50);
+        }            
+            
+            //if player is playing
+            var playing = false
+            //how many lives the player has
+            var lives = 0
+            //how fast the game is moving
+            var speed = 0
+            //how many points the player has
+            var score = 0
+            //starting position
+            var startPos
+            
+            function mainLoop(){
+                 colorRect(0,0,canvas.width,canvas.height,'black');
+            colorRect(ballXpos,ballYpos,BALL_SIZE,BALL_SIZE,'red');
+            
+            colorRect(AI_PADDLE_X_POS,aiPaddleYpos,AI_PADDLE_WIDTH,AI_PADDLE_HEIGHT,'white');
+            //ai
+            colorRect(pPaddleXpos,pPaddleYpos,P_PADDLE_WIDTH,P_PADDLE_HEIGHT,'white');
+            //player
+            
+            if(startPos) {
+                startingPos() 
+                    startingPos();
+                    startPos = false;
+            }
+            }
+        function colorRect(x,y,w,h,color){
+            canvasContext.fillStyle = color;
+            canvasContext.fillRect(x,y,w,h)
+        }
+        
+        object.onkeypress = function(){myScript};
+            
+
+    </script>
+</body>
+</html>
