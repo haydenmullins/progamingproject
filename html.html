@@ -1,0 +1,102 @@
+<html>
+<head>
+<canvas width="400" height="400" tabindex="1"></canvas>
+</head>
+<script>
+var Canvas = document.querySelector("canvas");
+var Ctx = Canvas.getContext("2d");
+//Framerate resposable for how fast the game updates which represents the ball drop speed
+var FrameRate = 400;
+var TickID;
+
+const Width = Canvas.width;
+const Height = Canvas.height;
+//ball values might make ball get smaller and faster as points increase
+var BallSize = 20;
+var BallSpeed = 250 / FrameRate;
+var Balls = [];
+//Catchers values, might change to get smaller as points increase
+var PaddleX = 200;
+var PaddleY = Height - 20;
+var PaddleXSpeed = 10;
+var PaddleWidth = 120;
+//Game variables
+var Lives = 5;
+var Score = 0;
+
+//function to generate random numbers which ball will use
+function RandInt(Min, Max){
+    return Math.floor(Math.random() * (Max - Min + 1)) + Min;
+}
+
+function Render(){
+    Ctx.clearRect(0, 0, Width, Height);
+    //Paddles colour and width
+    Ctx.fillStyle = 'blue';
+    Ctx.fillRect(PaddleX - (PaddleWidth / 2), PaddleY, PaddleWidth, 10);
+    //ball colour
+    Ctx.fillStyle = 'black';
+    
+    for(var IDx = 0; IDx < Balls.length; IDx++) {
+        Balls[IDx][1] = Balls[IDx][1] + BallSpeed;
+        
+        if(Balls[IDx][1] > Height) {
+            Balls.splice(IDx, 1);
+            Lives--;
+            //end game and notify player they lied > running out of lives
+            if(Lives === 0) {
+                clearInterval(TickID);
+                alert("You died.");
+            } else {
+                Balls.push([RandInt(BallSize / 2, Width - (BallSize / 2)), BallSize / 2]);
+            }
+            
+            return;
+        }
+        
+        var X = Balls[IDx][0];
+        var Y = Balls[IDx][1];
+
+        if(
+            X > PaddleX - (PaddleWidth / 2) && 
+            X < PaddleX + (PaddleWidth / 2) &&
+            Y >= PaddleY
+        ) {
+           Score++;
+           Balls.splice(IDx, 1);
+           Balls.push([RandInt(BallSize / 2, Width - (BallSize / 2)), BallSize / 2]);
+        }
+        
+        Ctx.beginPath();
+        Ctx.arc(X, Y, BallSize / 2, 0, 2 * Math.PI, false);
+        Ctx.fill();
+        Ctx.stroke();
+    }
+    //Displays players lives and score in the game
+    Ctx.font = "20px Arial";
+    Ctx.fillStyle = 'black';
+	// keeps text at top of canvas no matter what size
+    Ctx.fillText(`Lives: ${Lives}`, 0, 20);
+    Ctx.fillText(`Score: ${Score}`, 0, 40);
+}
+//Move balls on arrow key left or right press
+Canvas.addEventListener("keydown", function HandleKeyPress(Evt) {
+    if (Evt.keyCode == 39) { //Right arrow key
+        PaddleX += PaddleXSpeed;    
+        if(PaddleX > (Width-PaddleWidth/2)) PaddleX = (Width - PaddleWidth/2);
+    }
+
+    if (Evt.keyCode == 37) { //Left arrow key
+        PaddleX -= PaddleXSpeed;
+        if(PaddleX < PaddleWidth/2) PaddleX = PaddleWidth/2;
+    }
+}, true);
+
+Balls.push([RandInt(BallSize / 2, Width - (BallSize / 2)), BallSize / 2]);
+Canvas.focus();
+
+Render();
+
+var TickID = setInterval(Render, 1000 / FrameRate);
+</script>
+</html>
