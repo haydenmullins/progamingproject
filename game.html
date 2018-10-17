@@ -1,88 +1,105 @@
-<!doctype html>
 <html>
 <head>
-    <title>Game</title>
+<canvas width="400" height="400" tabindex="1"></canvas>
 </head>
-<body>
-	<canvas id="gameCanvas" width="800" height="800"></canvas>
-	<script>
-		var canvas, canvasContext;
+    <button onclick="Restart()">Restart</button>
+<script>
+var Canvas = document.querySelector("canvas");
+var Ctx = Canvas.getContext("2d");
+//Framerate resposable for how fast the game updates which represents the ball drop speed
+var FrameRate = 400;
+var TickID;
+const Width = Canvas.width;
+const Height = Canvas.height;
+//ball values might make ball get smaller and faster as points increase
+var BallSize = 20;
+var BallSpeed = 250 / FrameRate;
+var Balls = [];
+//Catchers values, might change to get smaller as points increase
+var PaddleX = 200;
+var PaddleY = Height - 20;
+var PaddleXSpeed = 10;
+var PaddleWidth = 120;
+//Game variables
+var Lives = 5;
+var Score = 0;
+//Players name
+/*var name = prompt('Please enter a name'); 
 
-		window.onload = function() {
-			canvas = document.getElementById('gameCanvas');
-			canvasContext = canvas.getContext('2d');
-            
-            setInterval(mainLoop, 1000/50);
-        }            
-            //game variables
-            //if player is playing
-            var playing = false;
-            //how many lives the player has
-            var lives = 0;
-            //how fast the game is moving
-            var speed = 0;
-            //how many points the player has
-            var score = 0;
-            //starting horizontal position
-            var startXpos = 0;
-            //starting vertical position
-            var startYpos = 0;
-            //ball size x
-            var ballXsize = 0;
-            //ball size y
-            var ballYsize = ballXsize
-            
-            
-            //player variables
-            //players  xpos
-            var pXpos = 100;
-            //player ypos
-            var pYpos = 100;
-            //players width
-            var pWidth = 10;
-            //playerse height
-            var pHeight = 10;
-            //players xspeed
-            var pXspeed = 10;
-            //players yspeed
-            var pYspeed = 1;
-        
-            function mainLoop(){
-                //canvas
-                 colorRect(0,0,canvas.width,canvas.height,'black');
-                //ball
-                colorRect(startYpos,startXpos,ballXsize,ballYsize,'red'); //ballpos,ballpos,ballsize,ballsize,ballcolour
-            
-           // colorRect(AI_PADDLE_X_POS,aiPaddleYpos,AI_PADDLE_WIDTH,AI_PADDLE_HEIGHT,'white');
-            //player
-           colorRect(pXpos,pYpos,pHeight,pHeight,'white');
-                move();
-        
-            if(startYpos) {
-                startingPos() 
-                    startingPos();
-                    startPos = false;
-            }
-            }
-        
-        function colorRect(x,y,w,h,color){
-            canvasContext.fillStyle = color;
-            canvasContext.fillRect(x,y,w,h)
-        }
-        
-      //  object.onkeypress = function(){myScript};
+if (name = null) {
+    prompt('Please enter a name')
+}*/
+ //Reload the page when restart button is clicked   
+function Restart(){
+    location.reload();
+}
+//function to generate random numbers which ball will use
+function RandInt(Min, Max){
+    return Math.floor(Math.random() * (Max - Min + 1)) + Min;
+}
+function Render(){
+    Ctx.clearRect(0, 0, Width, Height);
+    //Paddles colour and width
+    Ctx.fillStyle = 'blue';
+    Ctx.fillRect(PaddleX - (PaddleWidth / 2), PaddleY, PaddleWidth, 10);
+    //ball colour
+    Ctx.fillStyle = 'black';
     
-        function move(){
-            pXpos = pXpos + pXspeed;
+    for(var IDx = 0; IDx < Balls.length; IDx++) {
+        Balls[IDx][1] = Balls[IDx][1] + BallSpeed;
+        
+        if(Balls[IDx][1] > Height) {
+            Balls.splice(IDx, 1);
+            Lives--;
+            //end game and notify player they lied > running out of lives
+            if(Lives === 0) {
+                clearInterval(TickID);
+                alert("You died.");
+            } else {
+                Balls.push([RandInt(BallSize / 2, Width - (BallSize / 2)), BallSize / 2]);
+            }
             
-            if(pXpos > 780) {   //loses speed when goes to edge of canvas *-1 to make it bounce back
-               pXspeed = pXspeed - pXspeed
-               }
+            return;
         }
-
-
         
+        var X = Balls[IDx][0];
+        var Y = Balls[IDx][1];
+        if(
+            X > PaddleX - (PaddleWidth / 2) && 
+            X < PaddleX + (PaddleWidth / 2) &&
+            Y >= PaddleY
+        ) {
+           Score++;
+           Balls.splice(IDx, 1);
+           Balls.push([RandInt(BallSize / 2, Width - (BallSize / 2)), BallSize / 2]);
+        }
         
-    </script>
-</body>
+        Ctx.beginPath();
+        Ctx.arc(X, Y, BallSize / 2, 0, 2 * Math.PI, false);
+        Ctx.fill();
+        Ctx.stroke();
+    }
+    //Displays players lives and score in the game
+    Ctx.font = "20px Arial";
+    Ctx.fillStyle = 'black';
+	// keeps text at top of canvas no matter what size
+    Ctx.fillText(`Lives: ${Lives}`, 0, 20);
+    Ctx.fillText(`Score: ${Score}`, 0, 40);
+}
+//Move balls on arrow key left or right press
+Canvas.addEventListener("keydown", function HandleKeyPress(Evt) {
+    if (Evt.keyCode == 39) { //Right arrow key
+        PaddleX += PaddleXSpeed;    
+        if(PaddleX > (Width-PaddleWidth/2)) PaddleX = (Width - PaddleWidth/2);
+    }
+    if (Evt.keyCode == 37) { //Left arrow key
+        PaddleX -= PaddleXSpeed;
+        if(PaddleX < PaddleWidth/2) PaddleX = PaddleWidth/2;
+    }
+}, true);
+Balls.push([RandInt(BallSize / 2, Width - (BallSize / 2)), BallSize / 2]);
+Canvas.focus();
+Render();
+var TickID = setInterval(Render, 1000 / FrameRate);
+</script>
 </html>
