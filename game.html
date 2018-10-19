@@ -23,13 +23,18 @@ var PaddleWidth = 120;
 //Game variables
 var Lives = 5;
 var Score = 0;
-//Players name
-var name = prompt('Please enter a name'); 
-
-if (name == '' || null) {
-    prompt('Please enter a name')
+//Forces player to select level
+/*var Level = "";
+while (Level != Easy || Level != Medium || Level != Hard) {
+    Level = prompt("Please Select difficulty 'Easy', 'Medium' or 'Hard'");
 }
- //Reload the page when restart button is clicked   
+*/
+//Forces player to enter a name
+var Name = "";
+while (Name == "" || Name == " " || Name == null) {
+    Name = prompt("Please enter a name");
+}
+//refreshes the page when restart button is clicked   
 function Restart(){
     location.reload();
 }
@@ -54,7 +59,7 @@ function Render(){
             //end game and notify player they lied > running out of lives
             if(Lives === 0) {
                 clearInterval(TickID);
-                alert("You died.");
+                alert(Name + " your final score was " + Score);
             } else {
                 Balls.push([RandInt(BallSize / 2, Width - (BallSize / 2)), BallSize / 2]);
             }
