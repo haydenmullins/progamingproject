@@ -40,7 +40,8 @@ if (Level == "Medium") {
     var Lives = 1 && BallSpeed = 250
 } else {
     console.log('easy')
-}*/
+}
+    */
 /////////////////////////////////////////////////////////////////////
 
     
@@ -57,6 +58,7 @@ function Restart(){
 function RandInt(Min, Max){
     return Math.floor(Math.random() * (Max - Min + 1)) + Min;
 }
+//Function which renders the balls, adds and removes lives and scroe if ball is off the canvas
 function Render(){
     Ctx.clearRect(0, 0, Width, Height);
     //Paddles colour and width
