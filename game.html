@@ -9,7 +9,7 @@ var Ctx = Canvas.getContext("2d");
 //Framerate resposable for how fast the game updates
 var FrameRate = 400;
 var TickID;
-const Width = Canvas.width;
+const WIDTH = Canvas.width;
 const Height = Canvas.height;
 //ball values might make ball get smaller and faster as points increase
 var BallSize = 20;
@@ -24,10 +24,11 @@ var PaddleWidth = 120;
 var Lives = 5;
 var Score = 0;
     
-/////////////////////////////////////////////////////////////////////    
+
 //Forces player to select level
-/*var Level = "";
-while (Level != "Easy" || Level != "Medium" || Level != "Hard") {
+    
+var Level = "";
+while (Level != "Easy" && Level != "Medium" && Level != "Hard") {
     Level = prompt("Please Select difficulty 'Easy', 'Medium' or 'Hard'", 'Easy');
 }
     
@@ -35,15 +36,15 @@ while (Level != "Easy" || Level != "Medium" || Level != "Hard") {
     
 //fix select difficulty and modify ballspeeds to increaes speed
 if (Level == "Medium") {
-   var Lives = 3 && BallSpeed = 250
-}   else if (Level == "Hard") {
-    var Lives = 1 && BallSpeed = 250
+   var Lives = 3;
+  // BallSpeed = 250;
+}  
+if (Level == "Hard") {
+    var Lives = 1; 
+    BallSpeed = 250;
 } else {
-    console.log('easy')
+    console.log('level = ' + Level)
 }
-    */
-/////////////////////////////////////////////////////////////////////
-
     
 //Forces player to enter a name
 var Name = "";
@@ -60,7 +61,7 @@ function RandInt(Min, Max){
 }
 //Function which renders the balls, adds and removes lives and scroe if ball is off the canvas
 function Render(){
-    Ctx.clearRect(0, 0, Width, Height);
+    Ctx.clearRect(0, 0, WIDTH, Height);
     //Paddles colour and width
     Ctx.fillStyle = 'blue';
     Ctx.fillRect(PaddleX - (PaddleWidth / 2), PaddleY, PaddleWidth, 10);
@@ -78,7 +79,7 @@ function Render(){
                 clearInterval(TickID);
                 alert(Name + " your final score was " + Score);
             } else {
-                Balls.push([RandInt(BallSize / 2, Width - (BallSize / 2)), BallSize / 2]);
+                Balls.push([RandInt(BallSize / 2, WIDTH - (BallSize / 2)), BallSize / 2]);
             }
             
             return;
@@ -93,7 +94,7 @@ function Render(){
         ) {
            Score++;
            Balls.splice(IDx, 1);
-           Balls.push([RandInt(BallSize / 2, Width - (BallSize / 2)), BallSize / 2]);
+           Balls.push([RandInt(BallSize / 2, WIDTH - (BallSize / 2)), BallSize / 2]);
         }
         
         Ctx.beginPath();
@@ -112,14 +113,14 @@ function Render(){
 Canvas.addEventListener("keydown", function HandleKeyPress(Evt) {
     if (Evt.keyCode == 39) { //Right arrow key
         PaddleX += PaddleXSpeed;    
-        if(PaddleX > (Width-PaddleWidth/2)) PaddleX = (Width - PaddleWidth/2);
+        if(PaddleX > (WIDTH-PaddleWidth/2)) PaddleX = (WIDTH - PaddleWidth/2);
     }
     if (Evt.keyCode == 37) { //Left arrow key
         PaddleX -= PaddleXSpeed;
         if(PaddleX < PaddleWidth/2) PaddleX = PaddleWidth/2;
     }
 }, true);
-Balls.push([RandInt(BallSize / 2, Width - (BallSize / 2)), BallSize / 2]);
+Balls.push([RandInt(BallSize / 2, WIDTH - (BallSize / 2)), BallSize / 2]);
 Canvas.focus();
 Render();
 var TickID = setInterval(Render, 1000 / FrameRate);
