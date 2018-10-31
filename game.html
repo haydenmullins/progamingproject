@@ -21,7 +21,7 @@ var PaddleY = Height - 20;
 var PaddleXSpeed = 10;
 var PaddleWidth = 120;
 //Game variables
-var Lives = 5;
+var Lives = 3;
 var Score = 0;
     
 
@@ -31,17 +31,17 @@ var Level = "";
 while (Level != "Easy" && Level != "Medium" && Level != "Hard") {
     Level = prompt("Please Select difficulty 'Easy', 'Medium' or 'Hard'", 'Easy');
 }
-    
-    
-    
-//fix select difficulty and modify ballspeeds to increaes speed
 if (Level == "Medium") {
-   var Lives = 3;
-  // BallSpeed = 250;
+   var Lives = 2;
+    BallSpeed = 400 / FrameRate;
+    PaddleWidth = 80;
+    BallSize = 15;
 }  
 if (Level == "Hard") {
     var Lives = 1; 
-    BallSpeed = 250;
+    BallSpeed = 450 / FrameRate;
+    PaddleWidth = 40;
+    BallSize = 10;
 } else {
     console.log('level = ' + Level)
 }
