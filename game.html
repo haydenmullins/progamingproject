@@ -30,7 +30,7 @@ var Score = 0;
 var Level = "";
 while (Level != "Easy" && Level != "Medium" && Level != "Hard") {
     Level = prompt("Please Select difficulty 'Easy', 'Medium' or 'Hard'", 'Easy');
-}
+}//medium and hard decrease ball size, paddle with and lives and increase the ball speed
 if (Level == "Medium") {
    var Lives = 2;
     BallSpeed = 400 / FrameRate;
@@ -42,7 +42,7 @@ if (Level == "Hard") {
     BallSpeed = 450 / FrameRate;
     PaddleWidth = 40;
     BallSize = 10;
-} else {
+} else { //if medium or hard not selected will put easy
     console.log('level = ' + Level)
 }
     
